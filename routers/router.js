@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const controller = require("../controllers/controller")
 
-// const storeController = require("../controllers/storeController")
-// const records = [{ votos: 1, tema: "abel", enlace: "https:haso.com", id: 1 }];
-
-router.get("/", (req, res) => {
-  res.render("dashboard", { records });
-});
+router.post("/api/filter",controller.filter );
+router.post("/api/addLink",controller.addLink );
+router.post("/api/addTag",controller.addTag );
+router.post("/api/details",controller.details );
+router.post("/api/addVote",controller.addVote );
+router.get("/api/pupulateSelect",controller.pupulateSelect );
+router.post("/api/addComment",controller.addComment );
 
 module.exports = router;
