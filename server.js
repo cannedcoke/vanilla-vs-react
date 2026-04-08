@@ -9,6 +9,8 @@ const Route = require("./routers/router");
 
 require("./middlewares/db");
 
+const cors = require("cors");
+app.use(cors());
 
 app.use(express.json());
 // parsea los datos de la request para que sean usables
