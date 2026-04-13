@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+// schema of the tag collection
 const tagSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
