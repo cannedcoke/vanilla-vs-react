@@ -1,6 +1,8 @@
 const Record = require("../models/recordSchema");
 const Tag = require("../models/tagSchema");
 
+
+// se obtiene el tag y se busca en la db todos los registros con ese tag
 exports.filter = async (req, res) => {
 
   const { tag } = req.body;
@@ -9,8 +11,8 @@ exports.filter = async (req, res) => {
     return res.json({ records });
   }
   
-  const tagDoc = await Tag.findOne({ name: tag }); // find the tag document first
-  if (!tagDoc) return res.json({ records: [] }); // no records if tag doesn't exist
+  const tagDoc = await Tag.findOne({ name: tag }); 
+  if (!tagDoc) return res.json({ records: [] }); 
 
   const records = await Record.find({
     etiquetas: { $in: [tagDoc._id] },
@@ -18,10 +20,11 @@ exports.filter = async (req, res) => {
   return res.json({ records });
 };
 
+// recibe el link y los tags seleccionados y los guarda en la base de datos
 exports.addLink = async (req, res) => {
   const { link, selectedTags } = req.body; // selectedTags is an array
 
-  // Find all tag documents that match any of the selected tags
+  // 
   const tagDocs = await Promise.all(
     selectedTags.map(async (name) => {
       let tag = await Tag.findOne({ name });
@@ -32,7 +35,7 @@ exports.addLink = async (req, res) => {
 
   const tagIds = tagDocs.map((t) => t._id);
 
-  // Create record with multiple tags
+  // crea un nuevp registro con el array de tags
   const newRecord = new Record({
     tema: link,
     etiquetas: tagIds, // store as array
@@ -41,6 +44,7 @@ exports.addLink = async (req, res) => {
   res.json({ success: true });
 };
 
+// obtiene el tag y lo guarda en la bd
 exports.addTag = async (req, res) => {
   const { tag } = req.body; // selectedTags is an array
 
@@ -50,6 +54,7 @@ exports.addTag = async (req, res) => {
   res.json({ success: true });
 };
 
+// obtiene los detalles de un registro especifico por su id
 exports.details = async (req, res) => {
   const { id } = req.body;
   const details = await Record.findById(id).populate("etiquetas");
@@ -60,6 +65,7 @@ exports.details = async (req, res) => {
   res.json({ details });
 };
 
+// agrega un voto a un registro por su id
 exports.addVote = async (req, res) => {
   const { id } = req.body;
   const voted = await Record.updateOne({ _id: id }, { $inc: { votes: 1 } });
@@ -71,7 +77,8 @@ exports.addVote = async (req, res) => {
   res.json({ status: "success" });
 };
 
-exports.pupulateSelect = async (req, res) => {
+// obtiene todos los tags para llenar el select
+exports.populateSelect = async (req, res) => {
   const tags = await Tag.find({}, "name");
 
   if (!tags) {
@@ -81,6 +88,7 @@ exports.pupulateSelect = async (req, res) => {
   res.json({ tags });
 };
 
+// agrega comentario a la base de datos
 exports.addComment = async (req, res) => {
   const { id, input } = req.body;
 

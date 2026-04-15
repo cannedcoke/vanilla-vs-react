@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+// shcema of the record collection
 const recordSchema = new mongoose.Schema(
   {
     tema: {

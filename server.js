@@ -4,18 +4,18 @@ const app = express();
 
 const path = require("path");
 
-
 const Route = require("./routers/router");
 
+// middlewware para conexion a la base de datos
 require("./middlewares/db");
 
+// cors para cross origin requests
 const cors = require("cors");
 app.use(cors());
 
 app.use(express.json());
-// parsea los datos de la request para que sean usables
 
-// defino de donde se sirven los archivos estaticos
+// ubicacion de los archivos estaticos
 app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use("/", Route);
